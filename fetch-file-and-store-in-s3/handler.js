@@ -47,10 +47,6 @@ module.exports.save = (event, context, callback) => {
         Bucket: process.env.BUCKET,
         Key: event.key,
         Body: buffer,
-        ContentEncoding: 'base64', 
-        Metadata: {
-        'Content-Type': 'image/jpeg'
-    }
       }).promise()
     ))
     .then(v => callback(null, v), callback);

@@ -23,7 +23,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "fetch-file-and-store-in-s3/handler.js",
-        "code": "// 'use strict';\n\n// const fetch = require('node-fetch');\n// const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies\n\n// const s3 = new AWS.S3();\n\n// module.exports.save = (event, context, callback) => {\n//   fetch(event.image_url)\n//     .then((response) => {\n//       if (response.ok) {\n//         return response;\n//       }\n//       return Promise.reject(new Error(\n//             `Failed to fetch ${response.url}: ${response.status} ${response.statusText}`));\n//     })\n//     .then(response => response.buffer())\n//     .then(buffer => (\n//       s3.putObject({\n//         Bucket: process.env.BUCKET,\n//         Key: event.key,\n//         Body: buffer,\n//       }).promise()\n//     ))\n//     .then(v => callback(null, v), callback);\n// };\n\n'use strict';\n\nconst fetch = require('node-fetch');\nconst AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies\n\nconst s3 = new AWS.S3();\n\nmodule.exports.save = (event, context, callback) => {\n  fetch(event.image_url)\n    .then((response) => {\n      if (response.ok) {\n        return response;\n      }\n      return Promise.reject(new Error(\n            `Failed to fetch ${response.url}: ${response.status} ${response.statusText}`));\n    })\n    .then(response => response.buffer())\n    .then(buffer => (\n      s3.putObject({\n        Bucket: process.env.BUCKET,\n        Key: event.key,\n        Body: buffer,\n        ContentEncoding: 'base64', \n        Metadata: {\n        'Content-Type': 'image/jpeg'\n    }\n      }).promise()\n    ))\n    .then(v => callback(null, v), callback);\n};\n",
+        "code": "// 'use strict';\n\n// const fetch = require('node-fetch');\n// const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies\n\n// const s3 = new AWS.S3();\n\n// module.exports.save = (event, context, callback) => {\n//   fetch(event.image_url)\n//     .then((response) => {\n//       if (response.ok) {\n//         return response;\n//       }\n//       return Promise.reject(new Error(\n//             `Failed to fetch ${response.url}: ${response.status} ${response.statusText}`));\n//     })\n//     .then(response => response.buffer())\n//     .then(buffer => (\n//       s3.putObject({\n//         Bucket: process.env.BUCKET,\n//         Key: event.key,\n//         Body: buffer,\n//       }).promise()\n//     ))\n//     .then(v => callback(null, v), callback);\n// };\n\n'use strict';\n\nconst fetch = require('node-fetch');\nconst AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies\n\nconst s3 = new AWS.S3();\n\nmodule.exports.save = (event, context, callback) => {\n  fetch(event.image_url)\n    .then((response) => {\n      if (response.ok) {\n        return response;\n      }\n      return Promise.reject(new Error(\n            `Failed to fetch ${response.url}: ${response.status} ${response.statusText}`));\n    })\n    .then(response => response.buffer())\n    .then(buffer => (\n      s3.putObject({\n        Bucket: process.env.BUCKET,\n        Key: event.key,\n        Body: buffer,\n      }).promise()\n    ))\n    .then(v => callback(null, v), callback);\n};\n",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "save",
@@ -31,7 +31,12 @@
           "memory": 128,
           "layers": []
         },
-        "triggers": [],
+        "triggers": [
+          {
+            "resourceName": "apigusWest1hirupythonpythons3put",
+            "config": {}
+          }
+        ],
         "customSecurityPolicy": {
           "Statement": [
             {
@@ -107,7 +112,27 @@
       "c6af2abd-2810-4fd2-bfcc-1af72c4013a5"
     ],
     "currentFileId": "c6af2abd-2810-4fd2-bfcc-1af72c4013a5",
-    "resources": {},
+    "resources": {
+      "apigusWest1hirupythonpythons3put": {
+        "name": "apigusWest1hirupythonpythons3put",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-1",
+          "apiMode": 0,
+          "apiName": "hiru_python",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "python/s3",
+          "resourcePath": "/python/s3",
+          "restMethod": "PUT",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Test",
+          "mode": 0
+        }
+      }
+    },
     "customTemplate": {
       "dialect": "CloudFormation",
       "definitions": {}
@@ -157,14 +182,19 @@
     "projectRegion": "us-west-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1564993197738
+    "lastSave": 1564993860885
   },
   "VCS_STATE": {
     "provider": "GitHub",
     "repo": {
-      "name": "examples",
+      "name": "hiru0508_S3-image-fetch",
       "url": "https://github.com/HirudineeADRT/hiru0508_S3-image-fetch",
-      "branches": []
+      "branches": [
+        {
+          "name": "master",
+          "hash": "bcc1a0d22b7e7bc6cac925921443c9fe7ac2058b"
+        }
+      ]
     }
   }
 }
